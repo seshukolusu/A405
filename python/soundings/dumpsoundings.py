@@ -14,7 +14,7 @@ import glob
 import matplotlib.pyplot as plt
 import pickle
 
-listfiles=glob.glob('spr*txt')
+listfiles=glob.glob('littlerock*txt')
 sounding_times=[]
 for a_file in listfiles:
     print "*"*60
@@ -54,18 +54,26 @@ for a_file in listfiles:
     #
     # old has spaces, new has underlines
     #
-    colnames=('press','height','temp','dewpt','relh','mixr')
-    titles=('hPa','height_m','temp_C','dewpt_C','relh_percent','mixr_gperkg')
+    colnames=('press','height','temp','dewpt','relh','mixr','drct',\
+              'sknt')
+    titles=('hPa','height_m','temp_C','dewpt_C','relh_percent','mixr_gperkg',\
+            'deg','knot')
     for old,new in keyList:
-        #grab the first six columns
+        #grab the first 8 columns
         ## [,0] PRES(hPa); [,1] HGHT(m); [,2] TEMP[C];
         ## [,3] DWPT(C); [,4] RELH(%); [,5] MIXR(g/kg);
-        the_array=out[old][:,:6]
+        titles=('hPa','height_m','temp_C','dewpt_C','relh_percent','mixr_gperkg',\
+            'deg','knot')
+        the_array=out[old][:,:8]
+        print "new: ",old,new
+        print "titles: ",titles
+        print "colnames: ",colnames
         newDict[new]=np.rec.fromarrays(the_array.T,names=colnames,titles=titles)
+        print "col check: ",newDict[new].dtype.names
+        print "col names: ",newDict[new].dtype.fields.items()
 
     newname=a_file.replace('txt','pic')
     outfile=open(newname,'w')
     outDict={'filename':a_file,'data':newDict}
     pickle.dump(outDict,outfile)
     outfile.close()
-    
