@@ -13,7 +13,7 @@ function theTemp = findTmoist(thetaE0,press);
       %assume no water vapor and use dry potential
       %temperature instead
       theTemp=thetaE0*(press/1.e5)^(c.Rd/c.cpd);
-      %no check to see whether wsat really is small
+      %now check to see whether wsat really is small
       wv=wsat(theTemp,press);
       if(wv > 1.e-5)
         fprintf('failed to converge, check limits\n')

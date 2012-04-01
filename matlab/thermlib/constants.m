@@ -14,3 +14,4 @@ function out=constants;
    out.D=2.36e-5;%diffusivity m^2/s^1 -- note: fairly strong function of temperature
                  %and pressure -- this is at 100kPa, 10degC
    out.rhol=1000.;
+end
