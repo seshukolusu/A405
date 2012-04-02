@@ -9,7 +9,7 @@ function [theTemp,wv,wl]=tinvert_thetae(thetaeVal,wT,p)
     end
     %the temperature has to be somewhere between thetae (T at surface)
     % -40 deg. C (no ice)
-   theTemp=fzero(@Tchange,[233.15,thetaeVal],[],thetaeVal,wT,p);
+   theTemp=fzero(@Tchange,[170.,thetaeVal],[],thetaeVal,wT,p);
    [wv,wl]=findWvWl(theTemp,wT,p);
 end
 
