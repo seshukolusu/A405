@@ -11,7 +11,7 @@ def convecSkew(figNum):
       Input:  figNum = integer
        Takes any integer, creates figure(figNum), and plots a
        skewT logp thermodiagram.
-      Output: skew=30.
+      Output: skew=30 and the handle for the plot
       """
       fig=plt.figure(figNum)
       fig.clf()
@@ -76,7 +76,7 @@ def convecSkew(figNum):
       thetaLevs = ax1.contour(xplot, yplot, theTheta, thetaLabels, \
                         colors='b')
 
-      wsLabels = range(6, 24, 2)
+      wsLabels = range(0, 24, 2)
       wsLevs = ax1.contour(xplot, yplot, (ws * 1.e3), wsLabels, \
                         colors='g')
 
@@ -94,13 +94,13 @@ def convecSkew(figNum):
       # Crop image to a more usable size
       #    
       
-      TempTickLabels = range(5, 35, 5)
+      TempTickLabels = range(-10, 35, 5)
       TempTickCoords = TempTickLabels
       skewTickCoords = convertTempToSkew(TempTickCoords, 1.e3, skew)
       ax1.set_xticks(skewTickCoords)
       ax1.set_xticklabels(TempTickLabels)
-      skewLimits = convertTempToSkew([5, 30], 1.e3, skew)
-      ax1.axis([skewLimits[0], skewLimits[1], 600, 1.e3])
+      skewLimits = convertTempToSkew([-10, 30], 1.e3, skew)
+      ax1.axis([skewLimits[0], skewLimits[1], 300, 1.e3])
       
       #
       # Create line labels
@@ -114,7 +114,7 @@ def convecSkew(figNum):
       tempLevs.clabel(inline=ovrlp, fmt='%2d', fontsize=fntsz,use_clabeltext=True)
       thetaLevs.clabel(inline=ovrlp, fmt='%5d', fontsize=fntsz,use_clabeltext=True)
       wsLevs.clabel(inline=ovrlp, fmt='%2d', fontsize=fntsz,use_clabeltext=True)
-      print thetaeLabels
+      #print thetaeLabels
       #
       # Flip the y axis
       #
@@ -122,9 +122,9 @@ def convecSkew(figNum):
       ax1.invert_yaxis()
       ax1.figure.canvas.draw()
       
-      return skew,thetaeLevs,thetaeLabels
+      return skew, ax1
 
 if __name__== "__main__":
-      skew,thetaeLevs,thetaeLabels=convecSkew(1)
+      skew, ax1 =convecSkew(1)
       plt.show()
       
