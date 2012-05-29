@@ -74,7 +74,6 @@ ax1.set_yticklabels(labels)
 ax1.set_ybound((400, 1000))
 
 
-
 calcTvDiffHandle = lambda pVals: calcTvDiff(pVals, thetaeVal, interpTenv, interpTdenv)
 presslevs = np.linspace(400, 950, 100)*1e2
 #reverse the pressure levels so integration can start at p = 950 hPa
@@ -95,5 +94,12 @@ cumCAPE = -c.Rd*np.cumsum(Tvdiff[1:]*np.diff(np.log(presslevs)))
 plt.figure(3)
 plt.plot(cumCAPE, presslevs[1:]/100)
 plt.title('cumulative CAPE (J/kg) vs. pressure (hPa)')
+plt.gca().invert_yaxis()
+plt.show()
+
+plt.figure(4)
+maxvel=np.sqrt(2*cumCAPE);
+plt.plot(maxvel, presslevs[1:]*0.01,'k-');
+plt.title('maximum updraft (m/s) vs. pressure (hPa)');
 plt.gca().invert_yaxis()
 plt.show()
