@@ -15,7 +15,7 @@ filename = 'littlerock.nc'
 nc_file = Dataset(filename)
 var_names = nc_file.variables.keys()
 print var_names
-print nc_file.ncattrs() 
+print nc_file.ncattrs()
 print nc_file.units
 print nc_file.col_names
 
@@ -40,7 +40,7 @@ plt.semilogy(xdew, press, 'b', linewidth =3)
 #**haven't found a fix for this yet
 labels = np.array(range(100, 1100, 100))
 ax1.set_yticks(labels)
-ax1.set_yticklabels(labels) 
+ax1.set_yticklabels(labels)
 ax1.set_ybound((400, 1000))
 ax1.set_title('littlerock sounding, %s' %var_names[3])
 fig1.canvas.draw()
@@ -70,7 +70,7 @@ trytemp = interpTenv(pressVals*1e-2)
 tryxtemp = convertTempToSkew(trytemp, pressVals*1e-2, skew)
 plt.semilogy(tryxtemp, pressVals*1e-2, 'b.', markersize=3)
 ax1.set_yticks(labels)
-ax1.set_yticklabels(labels) 
+ax1.set_yticklabels(labels)
 ax1.set_ybound((400, 1000))
 
 
@@ -84,7 +84,7 @@ for i in range(len(presslevs)):
     Tvdiff[i] = calcTvDiffHandle(presslevs[i])
     
 plt.figure(2)
-plt.plot(Tvdiff, presslevs/100)  
+plt.plot(Tvdiff, presslevs/100)
 plt.title('virtual temperature difference vs. pressure (hPa)')
 plt.gca().invert_yaxis()
 plt.show()
