@@ -97,6 +97,9 @@ plt.title('cumulative CAPE (J/kg) vs. pressure (hPa)')
 plt.gca().invert_yaxis()
 plt.show()
 
+#equate kinetic and potential energy toget maximum
+#updraft speed
+   
 plt.figure(4)
 maxvel=np.sqrt(2*cumCAPE);
 plt.plot(maxvel, presslevs[1:]*0.01,'k-');
