@@ -42,7 +42,10 @@ labels = np.array(range(100, 1100, 100))
 ax1.set_yticks(labels)
 ax1.set_yticklabels(labels)
 ax1.set_ybound((400, 1000))
+xlims = convertTempToSkew([-10, 30], 1.e3, skew)
+ax1.set_xbound((xlims[0], xlims[1]))
 ax1.set_title('littlerock sounding, %s' %var_names[3])
+ 
 fig1.canvas.draw()
 
 #get user inputed coords to draw moist adiabat

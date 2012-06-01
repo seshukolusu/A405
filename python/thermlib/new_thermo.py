@@ -484,7 +484,7 @@ def findTdwv(wv, p):
     """
     c = constants();
     e= wv*p/(c.eps + wv)
-    denom=(17.67/log(e/611.2)) - 1.
+    denom=(17.67/np.log(e/611.2)) - 1.
     Td = 243.5/denom
     Td = Td + 273.15
     
