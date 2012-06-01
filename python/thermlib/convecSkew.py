@@ -76,7 +76,9 @@ def convecSkew(figNum):
       thetaLevs = ax1.contour(xplot, yplot, theTheta, thetaLabels, \
                         colors='b')
 
+
       wsLabels =[0.1,0.25,0.5,1,2,3] + range(4, 20, 2) + [20,24,28]
+
       wsLevs = ax1.contour(xplot, yplot, (ws * 1.e3), wsLabels, \
                         colors='g')
 
@@ -94,18 +96,21 @@ def convecSkew(figNum):
       # Crop image to a more usable size
       #    
       
+
       TempTickLabels = range(-15, 40, 5)
+
       TempTickCoords = TempTickLabels
       skewTickCoords = convertTempToSkew(TempTickCoords, 1.e3, skew)
       ax1.set_xticks(skewTickCoords)
       ax1.set_xticklabels(TempTickLabels)
+
       skewLimits = convertTempToSkew([-15, 35], 1.e3, skew)
+
       ax1.axis([skewLimits[0], skewLimits[1], 300, 1.e3])
       
       #
       # Create line labels
       #
-
       fntsz = 9 # Handle for 'fontsize' of the line label.
       ovrlp = True # Handle for 'inline'. Any integer other than 0
                 # creates a white space around the label.
