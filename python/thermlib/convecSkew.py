@@ -115,10 +115,10 @@ def convecSkew(figNum):
       ovrlp = True # Handle for 'inline'. Any integer other than 0
                 # creates a white space around the label.
                 
-      thetaeLevs.clabel(thetaeLabels, inline=ovrlp, fmt='%5d', fontsize=fntsz,use_clabeltext=True)
-      tempLevs.clabel(inline=ovrlp, fmt='%2d', fontsize=fntsz,use_clabeltext=True)
-      thetaLevs.clabel(inline=ovrlp, fmt='%5d', fontsize=fntsz,use_clabeltext=True)
-      wsLevs.clabel(inline=ovrlp, fmt='%2d', fontsize=fntsz,use_clabeltext=True)
+      thetaeLevs.clabel(thetaeLabels, inline_spacing=0, inline=ovrlp, fmt='%5d', fontsize=fntsz,use_clabeltext=True)
+      tempLevs.clabel(inline=ovrlp, inline_spacing=0,fmt='%2d', fontsize=fntsz,use_clabeltext=True)
+      thetaLevs.clabel(inline=ovrlp, inline_spacing=0,fmt='%5d', fontsize=fntsz,use_clabeltext=True)
+      wsLevs.clabel(inline=ovrlp, inline_spacing=0, fmt='%2d', fontsize=fntsz,use_clabeltext=True)
       #print thetaeLabels
       #
       # Flip the y axis
