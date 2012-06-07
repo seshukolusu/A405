@@ -43,9 +43,9 @@ for i in range(0, len(pvec)):
     xcoord_sf[i] = convertTempToSkew(Tvec_sf[i] - c.Tc, pvec[i]*0.01, skew)
     
     
-tempA=Tvec_sf[len(Tvec_sf)-1]
+tempA=Tvec_sf[-1]
 pressA=pbot
-tempB=Tvec_eq[len(Tvec_eq)-1]
+tempB=Tvec_eq[-1]
 pressB=pbot
 tempC=Tvec_eq[0]
 pressC=ptop

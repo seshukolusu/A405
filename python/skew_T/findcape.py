@@ -62,7 +62,7 @@ plt.semilogy(xtemp, pressVals*1e-2, 'r', linewidth=3)
 #press must have unique values
 newPress = nudgePress(press)
 #interpolators return temp. in deg C given pressure in hPa
-#newPress must be in increasing order
+#independent variable used to interpolate must be in increasing order 
 #env. temp. interpolator
 interpTenv = lambda pVals: np.interp(pVals, newPress[::-1], temp[::-1])
 #dew point temp. interpolator
@@ -80,9 +80,8 @@ calcTvDiffHandle = lambda pVals: calcTvDiff(pVals, thetaeVal, interpTenv, interp
 presslevs = np.linspace(400, 950, 100)*1e2
 #reverse the pressure levels so integration can start at p = 950 hPa
 presslevs = presslevs[::-1]
-Tvdiff = np.zeros(presslevs.size)
-for i in range(len(presslevs)):
-    Tvdiff[i] = calcTvDiffHandle(presslevs[i])
+
+Tvdiff = [calcTvDiffHandle(p) for p in presslevs]
     
 plt.figure(2)
 plt.plot(Tvdiff, presslevs/100)
