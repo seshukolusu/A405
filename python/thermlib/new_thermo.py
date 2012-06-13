@@ -3,6 +3,7 @@ thermo functions/skewT-lnp functions from ATSC 405"""
 
 import numpy as np
 import scipy as sp
+from rootfinder import fzero
 from constants import constants
 import matplotlib.cbook as cbook
 from scipy import optimize 
@@ -416,6 +417,51 @@ def thetaes(T, p):
 
     return thetaep
 
+def invtheta(theta, p, *args):
+    """
+    Finds the temperature given theta, pressure and (optional) wv.
+     
+    Parameters
+    - - - - - -    
+    theta: float, temperature (K)
+    p: float, pressure (Pa)
+     
+    (optional) wv: float, vapor mixing ratio (kg/kg)
+     
+    Returns 
+    - - - - -
+    Tempout: float, temperature (K)
+     
+    reference emanuel p. 111 4.2.11
+    this is slightly more accurate than W&H 3.54 because it
+    uses the heat capacity of the air/vapor mixture
+     
+    Tests
+    - - - - -
+    >>> theta1 = theta(290, 800*100)
+    >>> temp1 = invtheta(theta1, 800*100)
+    >>> abs(290 - temp1) <= 1.e-8
+    True
+    >>> theta2 = theta(300, 700*100, 0.001)
+    >>> temp2 = invtheta(theta2, 700*100, 0.001)
+    >>> abs(300 - temp2) <= 1.e-8
+    True
+   
+    """
+    
+    c = constants()
+    if len(args) == 0:
+        wv = 0
+    #unpack args, args should be a tuple of length 1 containing wv
+    else:
+        wv, = args
+    power = c.Rd/c.cpd*(1. - 0.24*wv)
+    Tempout=theta/(c.p0/p)**power
+    return Tempout
+        
+        
+    
+
 def tinvert_thetae(thetaeVal, wT, p):
     """
     tinvert_thetae(thetaeVal, wT, p)
@@ -474,12 +520,30 @@ def Tchange(Tguess, thetaeVal, wT, p):
 
 def findTdwv(wv, p):
     """
-    
-    in:    wv = mixing ratio in kg/kg, p= pressure (Pa)
-    
-    out:   dewpoint temperature in K
-    
-    reference: Emanuel 4.4.14 p. 117
+    Tdfind(wv, p)
+
+    Calculates the due point temperature of an air parcel.
+
+    Parameters
+    - - - - - -
+    wv : float
+        Mixing ratio (kg/kg).
+    p : float
+        Pressure (Pa).
+
+    Returns
+    - - - -
+    Td : float
+        Dew point temperature (K).
+
+    Examples
+    - - - - -
+    >>> findTdwv(0.001, 8.e4)
+    253.39429263963504
+
+    References
+    - - - - - -
+    Emanuel 4.4.14 p. 117
     
     """
     c = constants();
@@ -562,40 +626,6 @@ def thetaEchange(Tguess, thetaE0, press):
     theDiff = thetaEguess - thetaE0;
     return theDiff
 
-def Tdfind(wv, p):
-    """
-    Tdfind(wv, p)
-
-    Calculates the due point temperature of an air parcel.
-
-    Parameters
-    - - - - - -
-    wv : float
-        Mixing ratio (kg/kg).
-    p : float
-        Pressure (Pa).
-
-    Returns
-    - - - -
-    Td : float
-        Dew point temperature (K).
-
-    Examples
-    - - - - -
-    >>> Tdfind(0.001, 8.e4)
-    253.39429263963504
-
-    References
-    - - - - - -
-    Emanuel 4.4.14 p. 117
-    
-    """
-    c = constants();    
-    e = wv * p / (c.eps + wv);
-    denom = (17.67 / np.log(e / 611.2)) - 1.;
-    Td = 243.5 / denom;
-    Td = Td + 273.15;
-    return Td
 
 def LCLfind(Td, T, p):
     """
@@ -660,6 +690,90 @@ def LCLfind(Td, T, p):
     #disp(sprintf('plcl=%0.5g',plcl))
 
     return Tlcl, plcl
+
+def findLCL0(wv, press0, temp0):
+    """
+    
+    findLCL0(wv, press0, temp0)
+   
+    Finds the temperature and pressure at the lifting condensation
+    level (LCL) of an air parcel (using a rootfinder).
+
+    Parameters
+    - - - - - -
+    wv : float
+         Mixing ratio (K).
+    temp0 : float
+           Temperature (K).
+    press0: float
+            pressure (Pa)
+
+    Returns
+    - - - - -
+    plcl : float
+        Pressure at the LCL (Pa).
+    Tlcl : float
+        Temperature at the LCL (K).
+    
+    Raises
+    - - - -
+    NameError
+        If the air is saturated at a given wv, temp0 and press0 (i.e. Tdew(wv, press0) >= temp0)
+        
+    Tests
+    - - - - -
+    >>> Td = findTdwv(5., 9.e4)
+    >>> Td > 280.
+    True
+    >>> findLCL0(5., 9.e4, 280.)
+    Traceback (most recent call last):
+        ...
+    NameError: parcel is saturated at this pressure
+    >>> T1, p1 =  findLCL0(0.001, 9.e4, 280.)
+    >>> print T1, p1
+    250.226034799 60692.0428535
+    
+    """
+    
+    c = constants()
+    
+    Td = findTdwv(wv, press0)
+    
+    if (Td >= temp0):
+        raise NameError('parcel is saturated at this pressure')
+    
+    theta0 = theta(temp0, press0, wv)
+   
+    #evalzero = lambda pguess: lclzero(pguess, wv, theta0)
+    
+    #will return pLCL when lclzero returns approx. 0 (i.e. when Td = temp0)
+    plcl = fzero(lclzero, [1000*100, 200*100], (wv, theta0))
+    Tlcl = invtheta(theta0, plcl, wv)
+    
+    return plcl, Tlcl
+    
+    
+def lclzero(pguess, wv0, theta0):
+    """
+    
+    Returns the result of the equation T - Td.  
+    
+    Parameters 
+    - - - - - -
+    pguess: float, a guess at the pressure at the LCL (input via fzero) (Pa)
+    wv0: float, mixing ratio of the parcel (kg/kg)
+    theta0: float, potential temperature of the parcel
+    
+    Returns 
+    - - - - - -
+    
+    T - Td: float, T is the temperature on the theta0 dry adiabat, 
+    and Td is the dewpoint temperature of a parcelat mixing ratio wv0 and pressure pguess.
+    
+    """
+    T = invtheta(theta0, pguess, wv0)
+    Td = findTdwv(wv0, pguess)
+    return T - Td
 
 
 def findWvWl(T, wT, p):
