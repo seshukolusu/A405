@@ -2,9 +2,11 @@
 
 import site
 site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
-from constants import constants
+from constants import constants as c
 import numpy as np
-from new_thermo import findTmoist, wsat
+from new_thermo import wsat
+from findTmoist import findTmoist
+
 
 def calcTvDiff(press, thetae0, interpTenv, interpTdEnv):
     """
@@ -28,7 +30,6 @@ def calcTvDiff(press, thetae0, interpTenv, interpTdEnv):
    
     """
     
-    c = constants()
     Tcloud=findTmoist(thetae0,press)
     wvcloud=wsat(Tcloud,press)
     Tvcloud=Tcloud*(1. + c.eps*wvcloud)

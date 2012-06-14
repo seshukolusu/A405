@@ -2,12 +2,10 @@ import site
 site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import matplotlib.pyplot as plt
 import numpy as np
-from constants import constants
+from constants import constants as c
 from new_thermo import theta, convertTempToSkew
 from convecSkew import convecSkew
 
-
-c=constants()
 
 #Carnot heat engine:
 #

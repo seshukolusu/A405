@@ -2,13 +2,13 @@
 #for a convectively unstable layer
 import site
 site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
-from constants import constants
+from constants import constants as c
 from convecSkew import convecSkew
-from new_thermo import thetaep, wsat, tinvert_thetae, convertTempToSkew, LCLfind, Tdfind, findTmoist, findTdwv
+from new_thermo import thetaep, wsat, tinvert_thetae, convertTempToSkew, LCLfind, Tdfind
+from findTmoist import findTmoist
 import numpy as np
 import matplotlib.pyplot as plt
 
-c=constants()
 
 Tbot=20.
 Ttop=17.5
@@ -81,7 +81,7 @@ for i in range(0,numPoints):
   Tpseudo[i]=findTmoist(theThetae[i],press[i]*100.)
   #find the actual temperature and dewpoint
   Temp[i],wv,wl=tinvert_thetae(theThetae[i],wtotal[i],press[i]*100.)
-  Tdew[i]=findTdwv(wv,press[i]*100.)
+  Tdew[i]=Tdfind(wv,press[i]*100.)
 
 plt.figure(2)
 skew, ax = convecSkew(2)
@@ -113,7 +113,7 @@ for i in range(0,numPoints):
   Tpseudo[i]=findTmoist(theThetae[i],press[i]*100.)
   #find the actual temperature and dewpoint
   Temp[i],wv,wl=tinvert_thetae(theThetae[i],wtotal[i],press[i]*100.)
-  Tdew[i]=findTdwv(wv,press[i]*100.)
+  Tdew[i]=Tdfind(wv,press[i]*100.)
 
 plt.figure(3)
 skew, ax = convecSkew(3)
@@ -145,7 +145,7 @@ for i in range(0,numPoints):
   Tpseudo[i]=findTmoist(theThetae[i],press[i]*100.)
   #find the actual temperature and dewpoint
   Temp[i],wv,wl=tinvert_thetae(theThetae[i],wtotal[i],press[i]*100.)
-  Tdew[i]=findTdwv(wv,press[i]*100.)
+  Tdew[i]=Tdfind(wv,press[i]*100.)
 
 plt.figure(4)
 skew, ax = convecSkew(4)
@@ -177,7 +177,7 @@ for i in range(0,numPoints):
   Tpseudo[i]=findTmoist(theThetae[i],press[i]*100.)
   #find the actual temperature and dewpoint
   Temp[i],wv,wl=tinvert_thetae(theThetae[i],wtotal[i],press[i]*100.)
-  Tdew[i]=findTdwv(wv,press[i]*100.)
+  Tdew[i]=Tdfind(wv,press[i]*100.)
 
 plt.figure(5)
 skew, ax = convecSkew(5)
@@ -209,7 +209,7 @@ for i in range(0,numPoints):
   Tpseudo[i]=findTmoist(theThetae[i],press[i]*100.)
   #find the actual temperature and dewpoint
   Temp[i],wv,wl=tinvert_thetae(theThetae[i],wtotal[i],press[i]*100.)
-  Tdew[i]=findTdwv(wv,press[i]*100.)
+  Tdew[i]=Tdfind(wv,press[i]*100.)
 
 plt.figure(6)
 skew, ax = convecSkew(6)

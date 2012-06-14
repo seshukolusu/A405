@@ -3,7 +3,7 @@ site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import matplotlib.pyplot as plt
 import numpy as np
 from constants import constants
-from new_thermo import findTdwv, thetaep, tinvert_thetae, convertTempToSkew
+from new_thermo import Tdfind, thetaep, tinvert_thetae, convertTempToSkew
 from convecSkew import convecSkew
 
 c=constants()
@@ -11,17 +11,17 @@ wtA=14.e-3
 pressA=900.e2
 tempA=25 + c.Tc
 
-TdA=findTdwv(wtA,pressA)
+TdA=Tdfind(wtA,pressA)
 thetaeA=thetaep(TdA,tempA,pressA)
 wtB=wtA
 pressB=700.e2
-TdB=findTdwv(wtB,pressB)
+TdB=Tdfind(wtB,pressB)
 thetaeB=thetaeA
 tempB,wvB,wlB=tinvert_thetae(thetaeB, wtB, pressB)
 
 wtC=wtA
 pressC=900.e2
-TdC=findTdwv(wtC,pressC)
+TdC=Tdfind(wtC,pressC)
 tempC=tempB
 thetaeC=thetaep(TdC,tempC,pressC)
 

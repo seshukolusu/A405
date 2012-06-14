@@ -3,11 +3,12 @@ site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import numpy as np
 import matplotlib.pyplot as plt
 from netCDF4 import Dataset
-from constants import constants
-from new_thermo import convertTempToSkew, thetaep, nudgePress, wsat, tinvert_thetae
+from constants import constants as c
+from new_thermo import convertTempToSkew, thetaep, wsat, tinvert_thetae
 from convecSkew import convecSkew
 from calcAdiabat import calcAdiabat
 from calcTvDiff import calcTvDiff
+from nudgePress import nudgePress
     
     
 filename='littlerock.nc';
@@ -21,7 +22,6 @@ print nc_file.ncattrs()
 print nc_file.units
 print nc_file.col_names
 
-c = constants()
 
 #grab the March 2 12Z sounding
 sound_var = nc_file.variables[var_names[3]]

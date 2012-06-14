@@ -3,7 +3,7 @@ site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import numpy as np
 import matplotlib.pyplot as plt
 from constants import constants
-from new_thermo import findTdwv, thetaep, tinvert_thetae, wsat, convertTempToSkew
+from new_thermo import Tdfind, thetaep, tinvert_thetae, wsat, convertTempToSkew
 from convecSkew import convecSkew
 
 
@@ -18,8 +18,8 @@ sfwv_top=3.e-3
 ptop=410.e2
 pbot=1000.e2
 
-eqTd_bot=findTdwv(eqwv_bot,pbot)
-sfTd_bot=findTdwv(sfwv_bot,pbot)
+eqTd_bot=Tdfind(eqwv_bot,pbot)
+sfTd_bot=Tdfind(sfwv_bot,pbot)
 thetae_eq=thetaep(eqTd_bot,eqT_bot,pbot)
 thetae_sf=thetaep(sfTd_bot,sfT_bot,pbot)
 

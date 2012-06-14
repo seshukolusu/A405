@@ -4,13 +4,14 @@ from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.pyplot import ginput
-from new_thermo import convertTempToSkew, convertSkewToTemp, thetaes, nudgePress
+from new_thermo import convertTempToSkew, convertSkewToTemp, thetaes
 from convecSkew import convecSkew
-from constants import constants
+from constants import constants as c
 from calcAdiabat import calcAdiabat
 from calcTvDiff import calcTvDiff
+from nudgePress import nudgePress
 
-c = constants()
+
 filename = 'littlerock.nc'
 nc_file = Dataset(filename)
 var_names = nc_file.variables.keys()
