@@ -17,28 +17,26 @@ def calcAdiabat(press0, thetae0, topPress):
     
     Returns
     - - - - - -
-    (pressVals, tempVals): pressVals (Pa) and tempVals (K) are 50 x 1 arrays 
+    (pressVals, tempVals): pressVals (Pa) and tempVals (K) are type ndarray
                            and are the coordinates of the thetae0 adiabat
                 
     
     Tests
     - - - - -
     >>> p,T = calcAdiabat(800*100, 300, 1000*100)
-    >>> p.shape
-    (50,)
-    >>> T.shape
-    (50,)
+    >>> len(p)
+    50
+    >>> len(T)
+    50
     
 
     """
     
     pressVals = np.linspace(press0, topPress, 50)
-    tempVals = np.zeros(pressVals.size)
     
-    for i in range(pressVals.size):
-        tempVals[i] = findTmoist(thetae0, pressVals[i])
+    tempVals = findTmoist(thetae0, pressVals)
     
-    return pressVals, tempVals
+    return pressVals, np.asarray(tempVals)
 
 def _test():
     import doctest
