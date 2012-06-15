@@ -56,14 +56,15 @@ def findLCL0(wv, press0, temp0):
    
     #evalzero = lambda pguess: lclzero(pguess, wv, theta0)
     
-    #will return pLCL when lclzero returns approx. 0 (i.e. when Td = temp0)
-    plcl = fzero(lclzero, [1000*100, 200*100], (wv, theta0))
+    #will return plcl, Tlcl when Tchange returns approx. 0 
+    #(i.e. when the parcel temperature = Td)
+    plcl = fzero(Tchange, [1000*100, 200*100], (wv, theta0))
     Tlcl = invtheta(theta0, plcl, wv)
     
     return plcl, Tlcl
     
     
-def lclzero(pguess, wv0, theta0):
+def Tchange(pguess, wv0, theta0):
     """
     
     Returns the result of the equation T - Td.  

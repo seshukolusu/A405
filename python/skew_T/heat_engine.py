@@ -2,12 +2,10 @@ import site
 site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import numpy as np
 import matplotlib.pyplot as plt
-from constants import constants
+from constants import constants as c
 from new_thermo import Tdfind, thetaep, tinvert_thetae, wsat, convertTempToSkew
 from convecSkew import convecSkew
 
-
-c = constants();
 
 eqT_bot=30 + c.Tc
 eqwv_bot=14*1.e-3
