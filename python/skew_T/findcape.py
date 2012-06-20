@@ -9,7 +9,7 @@ from convecSkew import convecSkew
 from constants import constants as c
 from calcAdiabat import calcAdiabat
 from calcTvDiff import calcTvDiff
-from nudgePress import nudgePress
+from nudge import nudge
 
 
 filename = 'littlerock.nc'
@@ -61,7 +61,7 @@ xtemp = convertTempToSkew(tempVals - c.Tc, pressVals*1e-2, skew)
 plt.semilogy(xtemp, pressVals*1e-2, 'r', linewidth=3)
 
 #press must have unique values
-newPress = nudgePress(press)
+newPress = nudge(press)
 #interpolators return temp. in deg C given pressure in hPa
 #independent variable used to interpolate must be in increasing order 
 #env. temp. interpolator

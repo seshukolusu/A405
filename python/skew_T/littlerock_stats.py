@@ -8,8 +8,7 @@ from new_thermo import convertTempToSkew, thetaep, wsat, tinvert_thetae
 from convecSkew import convecSkew
 from calcAdiabat import calcAdiabat
 from calcTvDiff import calcTvDiff
-from nudgePress import nudgePress
-    
+from nudge import nudge
     
 filename='littlerock.nc';
 print 'reading file: %s\n' %filename
@@ -64,7 +63,7 @@ xright=convertTempToSkew(25.,1.e3,skew)
 #
 #interpolator fails if two pressure values are the same
 #
-newPress = nudgePress(press)
+newPress = nudge(press)
 #independent variable used to interpolate must be in increasing order 
 #pVals must be in hPa
 interpTenv = lambda pVals: np.interp(pVals, newPress[::-1], temp[::-1])
