@@ -71,7 +71,7 @@ def ode_littlerock():
     plt.ylabel('height about surface (m)')
     plt.show()
         
-#F returns the buoyancy (and height) at a given time step and height
+#F returns the buoyancy (and height)at a given time step and height
 def F(t, y, thetae0, interpTenv, interpTdEnv, interpPress):
     #y[0] is the velocity, y[1] is the height
     yp = np.zeros((2,1))
