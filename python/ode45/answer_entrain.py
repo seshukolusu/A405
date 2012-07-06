@@ -54,12 +54,14 @@ def answer_entrain():
     y = np.array(yinit)
     t = np.array(tinit)
     
-    #stop integration when the parcel changes direction, or time runs out
+    #stop tracking the parcel when the time runs out, or if the parcel stops moving/is desecnding
     while r.successful() and r.t < tfin and r.y[0] > 0:
         #find y at the next time step
         #(r.integrate(t) updates the fields r.y and r.t so that r.y = F(t) and r.t = t 
         #where F is the function being integrated)
         r.integrate(r.t+dt)
+        if r.y[0] <= 0:
+            break
         #keep track of y at each time step
         y = np.vstack((y, r.y))
         t = np.vstack((t, r.t))
@@ -107,7 +109,8 @@ def answer_entrain():
     plt.show()
     
        
-#F returns the buoyancy (and height) at a given time step and height
+#F returns the buoyancy (and height), velocity, rate of change of thetae_cloud 
+#(w.r.t. time) and rate of change of total mixing ratio at a given time step and height
 def F(t, y, entrain_rate, interpTenv, interpTdEnv, interpPress):
     yp = np.zeros((4,1))
     velocity = y[0]
