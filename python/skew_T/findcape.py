@@ -4,13 +4,14 @@ from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.pyplot import ginput
-from new_thermo import convertTempToSkew, convertSkewToTemp, thetaes, nudgePress
+from new_thermo import convertTempToSkew, convertSkewToTemp, thetaes
 from convecSkew import convecSkew
-from constants import constants
+from constants import constants as c
 from calcAdiabat import calcAdiabat
 from calcTvDiff import calcTvDiff
+from nudge import nudge
 
-c = constants()
+
 filename = 'littlerock.nc'
 nc_file = Dataset(filename)
 var_names = nc_file.variables.keys()
@@ -60,9 +61,9 @@ xtemp = convertTempToSkew(tempVals - c.Tc, pressVals*1e-2, skew)
 plt.semilogy(xtemp, pressVals*1e-2, 'r', linewidth=3)
 
 #press must have unique values
-newPress = nudgePress(press)
+newPress = nudge(press)
 #interpolators return temp. in deg C given pressure in hPa
-#newPress must be in increasing order
+#independent variable used to interpolate must be in increasing order 
 #env. temp. interpolator
 interpTenv = lambda pVals: np.interp(pVals, newPress[::-1], temp[::-1])
 #dew point temp. interpolator
@@ -80,9 +81,8 @@ calcTvDiffHandle = lambda pVals: calcTvDiff(pVals, thetaeVal, interpTenv, interp
 presslevs = np.linspace(400, 950, 100)*1e2
 #reverse the pressure levels so integration can start at p = 950 hPa
 presslevs = presslevs[::-1]
-Tvdiff = np.zeros(presslevs.size)
-for i in range(len(presslevs)):
-    Tvdiff[i] = calcTvDiffHandle(presslevs[i])
+
+Tvdiff = [calcTvDiffHandle(p) for p in presslevs]
     
 plt.figure(2)
 plt.plot(Tvdiff, presslevs/100)

@@ -2,12 +2,10 @@ import site
 site.addsitedir('C:\Users\Den\mya405\python\\thermlib')
 import numpy as np
 import matplotlib.pyplot as plt
-from constants import constants
-from new_thermo import findTdwv, thetaep, tinvert_thetae, wsat, convertTempToSkew
+from constants import constants as c
+from new_thermo import Tdfind, thetaep, tinvert_thetae, wsat, convertTempToSkew
 from convecSkew import convecSkew
 
-
-c = constants();
 
 eqT_bot=30 + c.Tc
 eqwv_bot=14*1.e-3
@@ -18,8 +16,8 @@ sfwv_top=3.e-3
 ptop=410.e2
 pbot=1000.e2
 
-eqTd_bot=findTdwv(eqwv_bot,pbot)
-sfTd_bot=findTdwv(sfwv_bot,pbot)
+eqTd_bot=Tdfind(eqwv_bot,pbot)
+sfTd_bot=Tdfind(sfwv_bot,pbot)
 thetae_eq=thetaep(eqTd_bot,eqT_bot,pbot)
 thetae_sf=thetaep(sfTd_bot,sfT_bot,pbot)
 
@@ -43,9 +41,9 @@ for i in range(0, len(pvec)):
     xcoord_sf[i] = convertTempToSkew(Tvec_sf[i] - c.Tc, pvec[i]*0.01, skew)
     
     
-tempA=Tvec_sf[len(Tvec_sf)-1]
+tempA=Tvec_sf[-1]
 pressA=pbot
-tempB=Tvec_eq[len(Tvec_eq)-1]
+tempB=Tvec_eq[-1]
 pressB=pbot
 tempC=Tvec_eq[0]
 pressC=ptop

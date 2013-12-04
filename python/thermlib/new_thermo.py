@@ -1,4 +1,5 @@
 import numpy as np
+from rootfinder import fzero
 from constants import constants as c
 import matplotlib.cbook as cbook
 import numpy.testing as test
@@ -150,7 +151,7 @@ def tinvert_thetae(thetaeVal, wT, p):
     # The temperature has to be somewhere between thetae
     # (T at surface) and -40 deg. C (no ice).    
     handle = Tchange
-    theTemp = scipy.optimize.zeros.brenth(handle, 233.15, \
+    theTemp = scipy.optimize.zeros.brenth(handle, 50, \
                                       thetaeVal, (thetaeVal, wT, p));
     [wv,wl] = findWvWl(theTemp, wT, p);
     return theTemp,wv,wl
@@ -529,11 +530,53 @@ def thetaep(Td, T, p):
     #
     # peg this at 450 so rootfinder won't blow up
     #
-    if(thetaepOut > 450.):
+
+    if (thetaepOut > 450.):
         thetaepOut = 450;
+
     return thetaepOut
 
-
+def invtheta(theta, p, *args):
+    """
+    Finds the temperature given theta, pressure and (optional) wv.
+     
+    Parameters
+    - - - - - -    
+    theta: float, temperature (K)
+    p: float, pressure (Pa)
+     
+    (optional) wv: float, vapor mixing ratio (kg/kg)
+     
+    Returns 
+    - - - - -
+    Tempout: float, temperature (K)
+     
+    reference emanuel p. 111 4.2.11
+    this is slightly more accurate than W&H 3.54 because it
+    uses the heat capacity of the air/vapor mixture
+     
+    Tests
+    - - - - -
+    >>> theta1 = theta(290, 800*100)
+    >>> temp1 = invtheta(theta1, 800*100)
+    >>> abs(290 - temp1) <= 1.e-8
+    True
+    >>> theta2 = theta(300, 700*100, 0.001)
+    >>> temp2 = invtheta(theta2, 700*100, 0.001)
+    >>> abs(300 - temp2) <= 1.e-8
+    True
+   
+    """
+    
+    if len(args) == 0:
+        wv = 0
+    #unpack args, args should be a tuple of length 1 containing wv
+    else:
+        wv, = args
+    power = c.Rd/c.cpd*(1. - 0.24*wv)
+    Tempout=theta/(c.p0/p)**power
+    return Tempout
+        
 def _test():
     import doctest
     doctest.testmod()
